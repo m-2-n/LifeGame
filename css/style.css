@@ -1,0 +1,68 @@
+diff a/css/style.css b/css/style.css	(rejected hunks)
+@@ -0,0 1,66 @@
+@charset "utf-8";
+
+:root {
+  --board-border: 1px solid #888;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ccc;
+}
+
+#gen {
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 30px;
+  text-align: right;
+}
+
+#board {
+  /* width: 60px; */
+  /* height: 60px; */
+  margin: 0 auto;
+  margin-top: 10px;
+  border-top: var(--board-border);
+  border-left: var(--board-border);
+  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.panel {
+  width: 19px;
+  height: 19px;
+  border-right: var(--board-border);
+  border-bottom: var(--board-border);
+  cursor: pointer;
+}
+
+.panel.live {
+  background: #000;
+}
+
+#nav {
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+#cellColumns,
+#cellRows {
+  width: 30px;
+}
+
+#liveRule,
+#spawnRule {
+  width: 20px;
+}
+
+#controller {
+  margin-top: 10px;
+}
