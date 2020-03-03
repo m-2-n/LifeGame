@@ -14,7 +14,7 @@ body {
   background: #ccc;
 }
 
-#gen {
+header {
   width: 300px;
   margin: 0 auto;
   margin-top: 30px;
@@ -22,8 +22,6 @@ body {
 }
 
 #board {
-  /* width: 60px; */
-  /* height: 60px; */
   margin: 0 auto;
   margin-top: 10px;
   border-top: var(--board-border);
@@ -34,8 +32,8 @@ body {
 }
 
 .panel {
-  width: 19px;
-  height: 19px;
+  width: 9px;
+  height: 9px;
   border-right: var(--board-border);
   border-bottom: var(--board-border);
   cursor: pointer;

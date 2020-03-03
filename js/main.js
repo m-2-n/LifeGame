@@ -1,12 +1,15 @@
 "use strict";
 {
   // **** config ****
-  const defaultCellColumns = 4;
-  const defaultCellRows = 4;
+  const defaultCellColumns = 40;
+  const defaultCellRows = 40;
   const defaultLiveRule = 23;
   const defaultSpawnRule = 3;
+  const interval = 300;
 
   const selectBoard = document.getElementById("board");
+  const selectPanel = document.getElementsByClassName("panel");
+  const selectGen = document.getElementById("gen");
 
   const selectSubmit = document.getElementById("submitButton");
   const selectRandom = document.getElementById("randomButton");
@@ -22,6 +25,8 @@
   let arraySizeY;
   let live;
   let spawn;
+  let gen = 0;
+  let intervalId;
 
   function setRule() {
     const inputCellColumns = document.getElementById("cellColumns");
@@ -70,16 +75,12 @@
     for (let i = 0; i < arraySizeY; i++) {
       panelsCounter[i] = new Array(arraySizeX).fill(0);
     }
-
-    panels[2][2] = 1;
-    panels[2][3] = 1;
-    panels[2][4] = 1;
   }
 
   //ボードサイズ変更
   function createBoard() {
-    selectBoard.style.width = 20 * cellColumns + "px";
-    selectBoard.style.height = 20 * cellRows + "px";
+    selectBoard.style.width = 10 * cellColumns + "px";
+    selectBoard.style.height = 10 * cellRows + "px";
   }
 
   //パネル生成
@@ -127,6 +128,9 @@
         }
       }
     }
+
+    gen++;
+    selectGen.textContent = gen;
   }
 
   function updateArray() {
@@ -144,8 +148,6 @@
         }
       }
     }
-    console.log(panelsCounter);
-    console.log(panels);
   }
 
   function setGame() {
@@ -167,16 +169,6 @@
 
   setGame();
 
-  updatePanels();
-
-  // routine();
-
-  setInterval(routine, 1000);
-
-  selectSubmit.addEventListener("click", () => {
-    setGame();
-  });
-
   document.querySelectorAll(".panel").forEach(e => {
     e.addEventListener("click", () => {
       e.classList.toggle("live");
@@ -191,5 +183,45 @@
         panels[panelPositionY][panelPositionX] = 0;
       }
     });
+  });
+
+  selectSubmit.addEventListener("click", () => {
+    setGame();
+  });
+
+  selectStart.addEventListener("click", () => {
+    selectStart.disabled = true;
+    selectStop.disabled = false;
+    selectReset.disabled = true;
+    selectSubmit.disabled = true;
+    selectRandom.disabled = true;
+    intervalId = setInterval(routine, interval);
+  });
+
+  selectStop.addEventListener("click", () => {
+    selectStart.disabled = false;
+    selectStop.disabled = true;
+    selectReset.disabled = false;
+    selectSubmit.disabled = true;
+    selectRandom.disabled = true;
+    clearInterval(intervalId);
+  });
+
+  selectReset.addEventListener("click", () => {
+    selectStart.disabled = false;
+    selectStop.disabled = true;
+    selectReset.disabled = true;
+    selectSubmit.disabled = false;
+    selectRandom.disabled = false;
+    setGame();
+  });
+
+  selectRandom.addEventListener("click", () => {
+    for (let j = 1; j < cellRows + 1; j++) {
+      for (let i = 1; i < cellColumns + 1; i++) {
+        panels[j][i] = Math.floor(Math.random() * 2);
+      }
+    }
+    updatePanels();
   });
 }
