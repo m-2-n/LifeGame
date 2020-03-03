@@ -15,31 +15,34 @@
   const selectReset = document.getElementById("resetButton");
 
   let panels;
-  let sizeX;
-  let sizeY;
+  let panelsCounter;
+  let cellColumns;
+  let cellRows;
+  let arraySizeX;
+  let arraySizeY;
   let live;
   let spawn;
 
   function setRule() {
-    const cellColumns = document.getElementById("cellColumns");
-    const cellRows = document.getElementById("cellRows");
+    const inputCellColumns = document.getElementById("cellColumns");
+    if (!inputCellColumns.value) {
+      cellColumns = defaultCellColumns;
+      inputCellColumns.placeholder = defaultCellColumns;
+    } else {
+      cellColumns = parseInt(inputCellColumns.value, 10) + 2;
+    }
+    arraySizeX = cellColumns + 2;
+
+    const inputCellRows = document.getElementById("cellRows");
+    if (!inputCellRows.value) {
+      cellRows = defaultCellRows;
+      inputCellRows.placeholder = defaultCellRows;
+    } else {
+      cellRows = parseInt(inputCellRows.value, 10) + 2;
+    }
+    arraySizeY = cellRows + 2;
+
     const liveRule = document.getElementById("liveRule");
-    const spawnRule = document.getElementById("spawnRule");
-
-    if (!cellColumns.value) {
-      sizeX = defaultCellColumns;
-      cellColumns.placeholder = defaultCellColumns;
-    } else {
-      sizeX = parseInt(cellColumns.value, 10);
-    }
-
-    if (!cellRows.value) {
-      sizeY = defaultCellRows;
-      cellRows.placeholder = defaultCellRows;
-    } else {
-      sizeY = parseInt(cellRows.value, 10);
-    }
-
     if (!liveRule.value) {
       live = defaultLiveRule;
       liveRule.placeholder = defaultLiveRule;
@@ -47,6 +50,7 @@
       live = parseInt(liveRule.value, 10);
     }
 
+    const spawnRule = document.getElementById("spawnRule");
     if (!spawnRule.value) {
       spawn = defaultSpawnRule;
       spawnRule.placeholder = defaultSpawnRule;
@@ -57,33 +61,91 @@
 
   //二次元配列生成
   function createArray() {
-    panels = new Array(sizeY);
-    for (let i = 0; i < sizeY; i++) {
-      panels[i] = new Array(sizeX).fill(0);
+    panels = new Array(arraySizeY);
+    for (let i = 0; i < arraySizeY; i++) {
+      panels[i] = new Array(arraySizeX).fill(0);
     }
 
-    console.log(panels);
+    panelsCounter = new Array(arraySizeY);
+    for (let i = 0; i < arraySizeY; i++) {
+      panelsCounter[i] = new Array(arraySizeX).fill(0);
+    }
+
+    panels[2][2] = 1;
+    panels[2][3] = 1;
+    panels[2][4] = 1;
   }
 
   //ボードサイズ変更
   function createBoard() {
-    selectBoard.style.width = 20 * sizeX + "px";
-    selectBoard.style.height = 20 * sizeY + "px";
+    selectBoard.style.width = 20 * cellColumns + "px";
+    selectBoard.style.height = 20 * cellRows + "px";
   }
 
   //パネル生成
   function createPanel() {
-    for (let i = 0; i < sizeX * sizeY; i++) {
+    for (let i = 0; i < cellColumns * cellRows; i++) {
       const createPanel = document.createElement("div");
       createPanel.classList.add("panel");
 
-      const column = i % sizeX;
-      const row = Math.floor(i / sizeX);
-      createPanel.classList.add(`x-${column}`);
-      createPanel.classList.add(`y-${row}`);
+      const panelX = (i % cellColumns) + 1;
+      const panelY = Math.floor(i / cellColumns) + 1;
+      createPanel.classList.add(`x-${panelX}`);
+      createPanel.classList.add(`y-${panelY}`);
 
       selectBoard.appendChild(createPanel);
     }
+  }
+
+  function judgement() {
+    for (let j = 1; j < cellRows + 1; j++) {
+      for (let i = 1; i < cellColumns + 1; i++) {
+        let counter = 0;
+        if (panels[j - 1][i - 1] === 1) counter++;
+        if (panels[j][i - 1] === 1) counter++;
+        if (panels[j + 1][i - 1] === 1) counter++;
+        if (panels[j - 1][i] === 1) counter++;
+        if (panels[j + 1][i] === 1) counter++;
+        if (panels[j - 1][i + 1] === 1) counter++;
+        if (panels[j][i + 1] === 1) counter++;
+        if (panels[j + 1][i + 1] === 1) counter++;
+        panelsCounter[j][i] = counter;
+      }
+    }
+  }
+
+  function updatePanels() {
+    for (let j = 1; j < cellRows + 1; j++) {
+      for (let i = 1; i < cellColumns + 1; i++) {
+        const selectPanel = document.getElementsByClassName(
+          `panel x-${i} y-${j}`
+        );
+        if (panels[j][i] === 1) {
+          selectPanel[0].classList.add("live");
+        } else {
+          selectPanel[0].classList.remove("live");
+        }
+      }
+    }
+  }
+
+  function updateArray() {
+    for (let j = 1; j < cellRows + 1; j++) {
+      for (let i = 1; i < cellColumns + 1; i++) {
+        if (
+          panelsCounter[j][i] !== Math.floor(live / 1) % 10 &&
+          panelsCounter[j][i] !== Math.floor(live / 10) % 10
+        ) {
+          panels[j][i] = 0;
+        } else if (panelsCounter[j][i] === spawn) {
+          panels[j][i] = 1;
+        } else if (panels[j][i] === 1) {
+          panels[j][i] = 1;
+        }
+      }
+    }
+    console.log(panelsCounter);
+    console.log(panels);
   }
 
   function setGame() {
@@ -97,7 +159,19 @@
     createPanel();
   }
 
+  function routine() {
+    judgement();
+    updateArray();
+    updatePanels();
+  }
+
   setGame();
+
+  updatePanels();
+
+  // routine();
+
+  setInterval(routine, 1000);
 
   selectSubmit.addEventListener("click", () => {
     setGame();
