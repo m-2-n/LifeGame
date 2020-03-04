@@ -1,14 +1,13 @@
 "use strict";
 {
   // **** config ****
-  const defaultCellColumns = 40;
-  const defaultCellRows = 40;
+  const defaultCellColumns = 100;
+  const defaultCellRows = 100;
   const defaultLiveRule = 23;
   const defaultSpawnRule = 3;
-  const interval = 300;
+  const interval = 10;
 
   const selectBoard = document.getElementById("board");
-  const selectPanel = document.getElementsByClassName("panel");
   const selectGen = document.getElementById("gen");
 
   const selectSubmit = document.getElementById("submitButton");
@@ -18,7 +17,7 @@
   const selectReset = document.getElementById("resetButton");
 
   let panels;
-  let panelsCounter;
+  let panelsBefore;
   let cellColumns;
   let cellRows;
   let arraySizeX;
@@ -64,26 +63,21 @@
     }
   }
 
-  //二次元配列生成
   function createArray() {
     panels = new Array(arraySizeY);
+    panelsBefore = new Array(arraySizeY);
+
     for (let i = 0; i < arraySizeY; i++) {
       panels[i] = new Array(arraySizeX).fill(0);
-    }
-
-    panelsCounter = new Array(arraySizeY);
-    for (let i = 0; i < arraySizeY; i++) {
-      panelsCounter[i] = new Array(arraySizeX).fill(0);
+      panelsBefore[i] = new Array(arraySizeX).fill(0);
     }
   }
 
-  //ボードサイズ変更
   function createBoard() {
     selectBoard.style.width = 10 * cellColumns + "px";
     selectBoard.style.height = 10 * cellRows + "px";
   }
 
-  //パネル生成
   function createPanel() {
     for (let i = 0; i < cellColumns * cellRows; i++) {
       const createPanel = document.createElement("div");
@@ -98,9 +92,11 @@
     }
   }
 
-  function judgement() {
+  function updateArray() {
     for (let j = 1; j < cellRows + 1; j++) {
       for (let i = 1; i < cellColumns + 1; i++) {
+        panelsBefore[j][i] = panels[j][i];
+
         let counter = 0;
         if (panels[j - 1][i - 1] === 1) counter++;
         if (panels[j][i - 1] === 1) counter++;
@@ -110,44 +106,29 @@
         if (panels[j - 1][i + 1] === 1) counter++;
         if (panels[j][i + 1] === 1) counter++;
         if (panels[j + 1][i + 1] === 1) counter++;
-        panelsCounter[j][i] = counter;
-      }
-    }
-  }
 
-  function updatePanels() {
-    for (let j = 1; j < cellRows + 1; j++) {
-      for (let i = 1; i < cellColumns + 1; i++) {
+        if (
+          counter !== Math.floor(live / 1) % 10 &&
+          counter !== Math.floor(live / 10) % 10
+        ) {
+          panels[j][i] = 0;
+        } else if (counter === spawn) {
+          panels[j][i] = 1;
+        } else if (panels[j][i] === 1) {
+          panels[j][i] = 1;
+        }
+
         const selectPanel = document.getElementsByClassName(
           `panel x-${i} y-${j}`
         );
-        if (panels[j][i] === 1) {
-          selectPanel[0].classList.add("live");
-        } else {
-          selectPanel[0].classList.remove("live");
+        if (panelsBefore[j][i] !== panels[j][i]) {
+          selectPanel[0].classList.toggle("live");
         }
       }
     }
 
     gen++;
     selectGen.textContent = gen;
-  }
-
-  function updateArray() {
-    for (let j = 1; j < cellRows + 1; j++) {
-      for (let i = 1; i < cellColumns + 1; i++) {
-        if (
-          panelsCounter[j][i] !== Math.floor(live / 1) % 10 &&
-          panelsCounter[j][i] !== Math.floor(live / 10) % 10
-        ) {
-          panels[j][i] = 0;
-        } else if (panelsCounter[j][i] === spawn) {
-          panels[j][i] = 1;
-        } else if (panels[j][i] === 1) {
-          panels[j][i] = 1;
-        }
-      }
-    }
   }
 
   function setGame() {
@@ -159,12 +140,7 @@
     createArray();
     createBoard();
     createPanel();
-  }
-
-  function routine() {
-    judgement();
-    updateArray();
-    updatePanels();
+    gen = 0;
   }
 
   setGame();
@@ -195,7 +171,9 @@
     selectReset.disabled = true;
     selectSubmit.disabled = true;
     selectRandom.disabled = true;
-    intervalId = setInterval(routine, interval);
+
+    // updateArray();
+    intervalId = setInterval(updateArray, interval);
   });
 
   selectStop.addEventListener("click", () => {
@@ -220,8 +198,13 @@
     for (let j = 1; j < cellRows + 1; j++) {
       for (let i = 1; i < cellColumns + 1; i++) {
         panels[j][i] = Math.floor(Math.random() * 2);
+        const selectPanel = document.getElementsByClassName(
+          `panel x-${i} y-${j}`
+        );
+        if (panels[j][i] === 1) {
+          selectPanel[0].classList.add("live");
+        }
       }
     }
-    updatePanels();
   });
 }
