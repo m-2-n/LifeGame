@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
+	<head>
+		<meta charset="utf-8" />
 
-    <title>Life Game</title>
+		<title>Life Game</title>
 
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
 
-  <body>
-    <header>Generation: <span id="gen">0</span></header>
+	<body>
+		<header>Generation: <span id="gen">0</span></header>
 
-    <section id="board"></section>
+		<section id="board"></section>
 
-    <nav id="nav">
-      <div>
-        <span>Number of Columns: </span>
-        <input id="cellColumns" type="text" maxlength="3" pattern="^[0-9]$" />
-      </div>
+		<nav id="nav">
+			<div>
+				<span>Number of Columns: </span>
+				<input id="cellColumns" type="text" maxlength="3" pattern="^[0-9]$" />
+			</div>
 
-      <div>
-        <span>Number of Lines: </span>
-        <input id="cellRows" type="text" maxlength="3" pattern="^[0-9]$" />
-      </div>
+			<div>
+				<span>Number of Lines: </span>
+				<input id="cellRows" type="text" maxlength="3" pattern="^[0-9]$" />
+			</div>
 
-      <div>
-        <span>Rule: </span>
-        <input id="liveRule" type="text" maxlength="2" pattern="^[0-9]$" />
-        <span> / </span>
-        <input id="spawnRule" type="text" maxlength="2" pattern="^[0-9]$" />
-        <input id="submitButton" type="button" value="Submit" />
-        <input id="randomButton" type="button" value="Random" />
-      </div>
+			<div>
+				<span>Rule: </span>
+				<input id="liveRule" type="text" maxlength="2" pattern="^[0-9]$" />
+				<span> / </span>
+				<input id="spawnRule" type="text" maxlength="2" pattern="^[0-9]$" />
+				<input id="submitButton" type="button" value="Submit" />
+				<input id="randomButton" type="button" value="Random" />
+			</div>
 
-      <div id="controller">
-        <input id="startButton" type="button" value="Start" />
-        <input id="stopButton" type="button" value="Stop" disabled />
-        <input id="resetButton" type="button" value="Reset" disabled />
-      </div>
-    </nav>
+			<div id="controller">
+				<input id="startButton" type="button" value="Start" />
+				<input id="stopButton" type="button" value="Stop" disabled />
+				<input id="resetButton" type="button" value="Reset" disabled />
+			</div>
+		</nav>
 
-    <script src="js/main.js"></script>
-  </body>
+		<script src="js/main.js"></script>
+	</body>
 </html>

@@ -1,64 +1,64 @@
 @charset "utf-8";
 
 :root {
-  --board-border: 1px solid #888;
+	--board-border: 1px solid #888;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-  background: #ccc;
+	background: #ccc;
 }
 
 header {
-  width: 300px;
-  margin: 0 auto;
-  margin-top: 30px;
-  text-align: right;
+	width: 300px;
+	margin: 0 auto;
+	margin-top: 30px;
+	text-align: right;
 }
 
 #board {
-  margin: 0 auto;
-  margin-top: 10px;
-  border-top: var(--board-border);
-  border-left: var(--board-border);
-  background: #fff;
-  display: flex;
-  flex-wrap: wrap;
+	margin: 0 auto;
+	margin-top: 10px;
+	border-top: var(--board-border);
+	border-left: var(--board-border);
+	background: #fff;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .panel {
-  width: 9px;
-  height: 9px;
-  border-right: var(--board-border);
-  border-bottom: var(--board-border);
-  cursor: pointer;
+	width: 9px;
+	height: 9px;
+	border-right: var(--board-border);
+	border-bottom: var(--board-border);
+	cursor: pointer;
 }
 
 .panel.live {
-  background: #000;
+	background: #000;
 }
 
 #nav {
-  width: 300px;
-  margin: 0 auto;
-  margin-top: 20px;
+	width: 300px;
+	margin: 0 auto;
+	margin-top: 20px;
 }
 
 #cellColumns,
 #cellRows {
-  width: 30px;
+	width: 30px;
 }
 
 #liveRule,
 #spawnRule {
-  width: 20px;
+	width: 20px;
 }
 
 #controller {
-  margin-top: 10px;
+	margin-top: 10px;
 }
