@@ -88,7 +88,8 @@
 
         if (panelsCounter[y][x] !== 2 && panelsCounter[y][x] !== 3) {
           panels[y][x] = 0;
-        } else if (panelsCounter[y][x] === 3 || panelsCounter[y][x] === 6) {
+          // } else if (panelsCounter[y][x] === 3 || panelsCounter[y][x] === 6) {
+        } else if (panelsCounter[y][x] === 3) {
           panels[y][x] = 1;
         } else if (panels[y][x] === 1) {
           panels[y][x] = 1;
