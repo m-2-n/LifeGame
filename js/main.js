@@ -9,6 +9,13 @@
   const selectGen = document.getElementById("gen");
   const ctx = canvas.getContext("2d");
 
+  const requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame;
+  window.requestAnimationFrame = requestAnimationFrame;
+
   let gen = 0;
   let panels;
   let panelsCounter;
@@ -18,28 +25,11 @@
     if (typeof canvas.getContext === "undefined") {
       return;
     }
-
-    const CANVAS_WIDTH = cellSize * cellQtyX;
-    const CANVAS_HEIGHT = cellSize * cellQtyY;
-
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = CANVAS_WIDTH * dpr;
-    canvas.height = CANVAS_HEIGHT * dpr;
-    ctx.scale(dpr, dpr);
-
-    canvas.style.width = CANVAS_WIDTH + "px";
-    canvas.style.height = CANVAS_HEIGHT + "px";
+    canvas.width = cellSize * cellQtyX;
+    canvas.height = cellSize * cellQtyY;
 
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // for (let x = 0; x < cellQtyX; x++) {
-    //   for (let y = 0; y < cellQtyY; y++) {
-    //     ctx.strokeStyle = "#888";
-
-    //     ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-    //   }
-    // }
   }
 
   function draw() {
@@ -98,7 +88,7 @@
 
         if (panelsCounter[y][x] !== 2 && panelsCounter[y][x] !== 3) {
           panels[y][x] = 0;
-        } else if (panelsCounter[y][x] === 3) {
+        } else if (panelsCounter[y][x] === 3 || panelsCounter[y][x] === 6) {
           panels[y][x] = 1;
         } else if (panels[y][x] === 1) {
           panels[y][x] = 1;
@@ -113,11 +103,11 @@
   board();
   array();
 
-  function routine() {
+  function step() {
     update();
     draw();
+    window.requestAnimationFrame(step);
   }
 
-  // routine();
-  setInterval(routine, 1);
+  window.requestAnimationFrame(step);
 }
