@@ -17,6 +17,7 @@
   window.requestAnimationFrame = requestAnimationFrame;
 
   let gen = 0;
+  let genBefore = 0;
   let panels;
   let panelsCounter;
   let panelsBefore;
@@ -111,4 +112,11 @@
   }
 
   window.requestAnimationFrame(step);
+
+  function fps() {
+    document.getElementById("fps").textContent = gen - genBefore;
+    genBefore = gen;
+  }
+
+  setInterval(fps, 1000);
 }
