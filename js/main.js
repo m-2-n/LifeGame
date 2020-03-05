@@ -1,13 +1,14 @@
 "use strict";
 
 {
-	const cellSize = 5;
-	const cellQtyX = 100;
-	const cellQtyY = 100;
+	const cellSize = 3;
+	const cellQtyX = 200;
+	const cellQtyY = 200;
 
 	const canvas = document.getElementById("board");
-	const selectGen = document.getElementById("gen");
 	const ctx = canvas.getContext("2d");
+	const selectGen = document.getElementById("gen");
+	const selectPause = document.getElementById("pause");
 
 	const requestAnimationFrame =
 		window.requestAnimationFrame ||
@@ -16,11 +17,21 @@
 		window.msRequestAnimationFrame;
 	window.requestAnimationFrame = requestAnimationFrame;
 
+	const cancelAnimationFrame =
+		window.cancelAnimationFrame ||
+		window.mozcancelAnimationFrame ||
+		window.webkitcancelAnimationFrame ||
+		window.mscancelAnimationFrame;
+	window.cancelAnimationFrame = cancelAnimationFrame;
+
+	let animationId = "";
+
 	let gen = 0;
 	let genBefore = 0;
 	let panels;
 	let panelsCounter;
 	let panelsBefore;
+	let moving = false;
 
 	function board() {
 		if (typeof canvas.getContext === "undefined") {
@@ -89,8 +100,8 @@
 
 				if (panelsCounter[y][x] !== 2 && panelsCounter[y][x] !== 3) {
 					panels[y][x] = 0;
-					// } else if (panelsCounter[y][x] === 3 || panelsCounter[y][x] === 6) {
-				} else if (panelsCounter[y][x] === 3) {
+				} else if (panelsCounter[y][x] === 3 || panelsCounter[y][x] === 6) {
+					// } else if (panelsCounter[y][x] === 3) {
 					panels[y][x] = 1;
 				} else if (panels[y][x] === 1) {
 					panels[y][x] = 1;
@@ -104,14 +115,23 @@
 
 	board();
 	array();
+	draw();
 
 	function step() {
 		update();
 		draw();
-		window.requestAnimationFrame(step);
+		animationId = window.requestAnimationFrame(step);
 	}
 
-	window.requestAnimationFrame(step);
+	selectPause.addEventListener("click", () => {
+		if (moving) {
+			moving = false;
+			window.cancelAnimationFrame(animationId);
+		} else {
+			moving = true;
+			step();
+		}
+	});
 
 	function fps() {
 		document.getElementById("fps").textContent = gen - genBefore;
